@@ -1,5 +1,6 @@
 """island perimater"""
 
+
 def island_perimeter(grid):
     """island perimeter"""
     perimeter = 0
