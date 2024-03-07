@@ -4,6 +4,8 @@
 
 def island_perimeter(grid):
     """island perimeter"""
+    if type(grid) != list:
+        return 0
     perimeter = 0
     for i in range(1, len(grid)):
         for j in range(1, len(grid[i])):
