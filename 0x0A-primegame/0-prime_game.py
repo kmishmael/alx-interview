@@ -1,61 +1,68 @@
 #!/usr/bin/python3
-""" Prime Game """
+"""
+Prime Game
+"""
 
 
-def isprime(n):
-    """ Return prime number """
-    for i in range(2, n):
-        if n % i == 0:
+def findMultiples(num, targets):
+    """
+    finds multiples of a given number (constrained in a list)
+    """
+    for i in targets:
+        if i % num == 0:
+            targets.remove(i)
+    return targets
+
+
+def isPrime(i):
+    """
+    check if a number is prime.
+    """
+    if i == 1:
+        return False
+    for j in range(2, i):
+        if i % j == 0:
             return False
     return True
 
 
-def delete_numbers(n, nums):
-    """ Remove numbers - return zero """
-    for i in range(len(nums)):
-        if nums[i] % n == 0:
-            nums[i] = 0
+def findPrimes(n):
+    """
+    find primes
+    """
+    counter = 0
+    target = list(n)
+    for i in range(1, len(target) + 1):
+        if isPrime(i):
+            counter += 1
+            target.remove(i)
+            target = findMultiples(i, target)
+        else:
+            pass
+    return counter
 
 
 def isWinner(x, nums):
-    """ Return name of player that won
-    most rounds
-    """
-    nums.sort()
-    winner = False
-    Maria = 0
-    Ben = 0
-    for game in range(x):
-        # prints("game# ", game+1)
-        nums2 = list(range(1, nums[game] + 1))
-        # print("nums: ", nums2)
-        turn = 0
-        while True:
-            """
-            # monitor turns, uncomment to watch
-            if turn % 2 != 0:
-                print("Ben turn ")
-            else:
-                print("Maria turn ")
-            """
-            change = False
-            for i, n in enumerate(nums2):
-                # print("n: ", n, "i: ", i)
-                if n > 1 and isprime(n):
-                    delete_numbers(n, nums2)
-                    change = True
-                    turn += 1
-                    break
-            # print("movement: ". nums2)
-            if change is False:
+    """determine winner"""
+    players = {'Maria': 0, 'Ben': 0}
+    cluster = set()
+    for elem in range(x):
+        nums.sort()
+        num = nums[elem]
+        for i in range(1, num + 1):
+            cluster.add(i)
+            if i == num + 1:
                 break
-        if turn % 2 != 0:
-            Maria += 1
-        else:
-            Ben += 1
-        # print("Maria: {}, Ben: {}".format(Maria, Ben))
-    if Maria == Ben:
+        temp = findPrimes(cluster)
+
+        if temp % 2 == 0:
+            players['Ben'] += 1
+        elif temp % 2 != 0:
+            players['Maria'] += 1
+
+    if players['Maria'] > players['Ben']:
+        return 'Maria'
+    elif players['Maria'] < players['Ben']:
+        return 'Ben'
+    else:
         return None
-    if Maria > Ben:
-        return "Maria"
-    return "Ben"
